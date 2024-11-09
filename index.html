@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flex - Aplicație Bancară</title>
+  <style>
+    /* Styles globaux */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background: #0d0d0d;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    /* Header */
+    header {
+      width: 100%;
+      background-color: #1f1f1f;
+      color: #fff;
+      padding: 1em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+    }
+    .menu-toggle {
+      cursor: pointer;
+      font-size: 1.5em;
+    }
+    .profile {
+      display: flex;
+      align-items: center;
+    }
+    .profile img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .profile span {
+      font-size: 1.2em;
+      color: #ffa500;
+    }
+    /* Menu hamburger */
+    .sidebar {
+      position: fixed;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 250px;
+      background-color: #1f1f1f;
+      transform: translateX(100%);
+      transition: transform 0.3s;
+      padding-top: 60px;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+    .sidebar a, .sidebar .close-btn {
+      padding: 15px;
+      color: #ffa500;
+      text-decoration: none;
+      font-weight: bold;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sidebar a:hover {
+      background-color: #333;
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    /* Dashboard */
+    .dashboard {
+      margin: 2em 0;
+      text-align: center;
+      background-color: #1f1f1f;
+      padding: 2em;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+    .balance {
+      font-size: 2em;
+      color: #ffa500;
+      margin-bottom: 0.5em;
+    }
+    .actions {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1em;
+    }
+    .actions button {
+      background-color: #ffa500;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5em;
+      color: #121212;
+      cursor: pointer;
+    }
+    /* Carte virtuelle */
+    .card {
+      background-color: #333;
+      padding: 1.5em;
+      border-radius: 15px;
+      margin: 1em 0;
+      color: #fff;
+      text-align: left;
+      width: 100%;
+      max-width: 300px;
+      display: inline-block;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+    .card .card-number {
+      font-size: 1.2em;
+      letter-spacing: 3px;
+      margin-bottom: 0.5em;
+    }
+    .card .expiry {
+      color: #bbb;
+      font-size: 0.8em;
+    }
+    /* Bannières défilantes */
+    .banner {
+      background-color: #ffa500;
+      color: #1f1f1f;
+      padding: 1em;
+      text-align: center;
+      font-weight: bold;
+      margin: 1em 0;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      animation: slide 10s infinite;
+    }
+    @keyframes slide {
+      0%, 20%, 100% {transform: translateX(0);}
+      25%, 45% {transform: translateX(-100%);}
+      50%, 70% {transform: translateX(-200%);}
+      75%, 95% {transform: translateX(-300%);}
+    }
+    /* Transactions */
+    .transactions {
+      width: 90%;
+      max-width: 500px;
+      background-color: #1f1f1f;
+      padding: 1.5em;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      margin-top: 1em;
+    }
+    .transactions ul {
+      list-style: none;
+    }
+    .transactions li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5em 0;
+      border-bottom: 1px solid #333;
+    }
+    .transactions li .amount {
+      color: #ffa500;
+    }
+    /* Footer */
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #1f1f1f;
+      padding: 1em;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #333;
+    }
+    footer button {
+      background: none;
+      border: none;
+      color: #ffa500;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="profile">
+      <img src="https://via.placeholder.com/40" alt="Profil">
+      <span>Nume Titular</span>
+    </div>
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  </header>
+
+  <!-- Menu hamburger -->
+  <aside class="sidebar" id="sidebar">
+    <div class="close-btn" onclick="toggleMenu()">×</div>
+    <a href="#dashboard">Acasă</a>
+    <a href="#transactions">Tranzacții</a>
+    <a href="#card">Card virtual</a>
+    <a href="#iban">IBAN</a>
+    <a href="#support">Suport</a>
+  </aside>
+
+  <!-- Dashboard -->
+  <section id="dashboard" class="dashboard">
+    <h2>Flex - Aplicație Bancară</h2>
+    <div class="balance">Sold curent: <span id="balance-amount">$3,500.00</span></div>
+    <div class="actions">
+      <button onclick="alert('Funcționalitate de retragere')">💵</button>
+      <button onclick="alert('Funcționalitate de transfer')">💳</button>
+      <button onclick="alert('Funcționalități suplimentare')">➕</button>
+    </div>
+  </section>
+
+  <!-- Carte Virtuelle -->
+  <section id="card" class="card-section">
+    <h3>Cardul tău virtual</h3>
+    <div class="card">
+      <p class="card-number">**** **** **** 5678</p>
+      <p class="expiry">Exp: 12/25</p>
+      <button class="btn" onclick="purchaseCard()">Cumpără un card</button>
+    </div>
+  </section>
+
+  <!-- Bannières défilantes -->
+  <div class="banner">Anunț Publicitar 1 - Reducere la credite</div>
+  <div class="banner">Anunț Publicitar 2 - Oferte speciale pentru carduri</div>
+
+  <!-- Transactions -->
+  <section id="transactions" class="transactions">
+    <h3>Istoric Tranzacții</h3>
+    <ul id="transaction-list">
+      <li>
+        <span>Achiziție Magazin</span>
+        <span class="amount">- $45.00</span>
+      </li>
+      <li>
+        <span>Depozit</span>
+        <span class="amount">+ $200.00</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <button onclick="alert('Acasă')">🏠</button>
+    <button onclick="alert('Traduceți')">🌐</button>
+    <button onclick="alert('Mai multe opțiuni')">⋮</button>
+    <button onclick="alert('Asistență')">📞</button>
+  </footer>
+
+  <script>
+    // Fonction pour ouvrir et fermer le menu hamburger
+    function toggleMenu() {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.toggle("open");
+    }
+    // Exemple de fonction d'achat de carte
+    function purchaseCard() {
+      alert("Funcționalitate pentru achiziționarea cardului.");
+    }
+  </script>
+</body>
+</html>
